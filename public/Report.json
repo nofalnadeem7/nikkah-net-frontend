@@ -1,0 +1,82 @@
+[
+    {
+      "id": 1,
+      "reporter": {
+        "_id": "64ca1b23e72f5a3f3a2d1e8c",
+        "name": "Alice Johnson",
+        "email": "alice@example.com"
+      },
+      "reported": {
+        "_id": "64ca1b23e72f5a3f3a2d1e8d",
+        "name": "Bob Smith",
+        "email": "bob@example.com"
+      },
+      "reason": "Inappropriate language in a chat.",
+      "date": "2024-11-23T14:32:00Z",
+      "status": "pending"
+    },
+    {
+      "id": 2,
+      "reporter": {
+        "_id": "64ca1b23e72f5a3f3a2d1e8e",
+        "name": "Charlie Brown",
+        "email": "charlie@example.com"
+      },
+      "reported": {
+        "_id": "64ca1b23e72f5a3f3a2d1e8f",
+        "name": "Diana Prince",
+        "email": "diana@example.com"
+      },
+      "reason": "Spamming multiple users.",
+      "date": "2024-11-22T09:15:00Z",
+      "status": "resolved"
+    },
+    {
+      "id": 3,
+      "reporter": {
+        "_id": "64ca1b23e72f5a3f3a2d1e90",
+        "name": "Eve Black",
+        "email": "eve@example.com"
+      },
+      "reported": {
+        "_id": "64ca1b23e72f5a3f3a2d1e91",
+        "name": "Frank Green",
+        "email": "frank@example.com"
+      },
+      "reason": "Sharing offensive content.",
+      "date": "2024-11-24T10:50:00Z",
+      "status": "pending"
+    },
+    {
+      "id": 4,
+      "reporter": {
+        "_id": "64ca1b23e72f5a3f3a2d1e92",
+        "name": "Grace Hopper",
+        "email": "grace@example.com"
+      },
+      "reported": {
+        "_id": "64ca1b23e72f5a3f3a2d1e93",
+        "name": "Hank Adams",
+        "email": "hank@example.com"
+      },
+      "reason": "Impersonating another user.",
+      "date": "2024-11-21T18:05:00Z",
+      "status": "resolved"
+    },
+    {
+      "id": 5,
+      "reporter": {
+        "_id": "64ca1b23e72f5a3f3a2d1e94",
+        "name": "Ivy Walker",
+        "email": "ivy@example.com"
+      },
+      "reported": {
+        "_id": "64ca1b23e72f5a3f3a2d1e95",
+        "name": "Jack Hill",
+        "email": "jack@example.com"
+      },
+      "reason": "Harassment in direct messages.",
+      "date": "2024-11-20T22:45:00Z",
+      "status": "pending"
+    }
+  ]

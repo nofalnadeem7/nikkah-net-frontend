@@ -1,0 +1,78 @@
+.navbar {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    padding: 0 100px;
+    background: #DB5461; 
+    height: 80px;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width:100%;
+}
+
+.logo {
+    position: absolute; 
+    left: 20px; 
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 82px;
+    width: auto;
+    margin-right: 4px;
+}
+
+.menu-container {
+    display: flex;
+    justify-content: center; 
+    flex-grow: 1; 
+}
+
+.menu {
+    display: flex;
+    position: relative;
+    background: none;
+    border: none;
+    justify-content: center; 
+    gap: 40px; }
+
+.menu .ant-menu-item a {
+    color: #fff;
+    font-size: 20px;
+}
+
+.admin-info{
+  justify-content: center;
+  margin-left: 300px;
+  color: white;
+  margin-top: 11px;
+  font-size: larger;
+}
+
+.adminIcon{
+  margin-right: 10px;
+}
+
+.menu-button {
+    display: none;
+}
+
+.menu .ant-menu-item a:hover {
+    color: #fff;
+    font-size: 20px;
+}
+
+@media (max-width: 500px) {
+    .menu {
+        display: none; /* Hide the menu on smaller screens */
+    }
+
+    .menu-button {
+        display: block; /* Show the button on smaller screens */
+        background: #001529;
+        border: none;
+        color: white;
+    }
+}
