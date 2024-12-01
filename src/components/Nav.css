@@ -66,11 +66,11 @@
 
 @media (max-width: 500px) {
     .menu {
-        display: none; /* Hide the menu on smaller screens */
+        display: none; 
     }
 
     .menu-button {
-        display: block; /* Show the button on smaller screens */
+        display: block; 
         background: #001529;
         border: none;
         color: white;
