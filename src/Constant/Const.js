@@ -3,11 +3,7 @@ import logoNN from "../components/assets/images/logoNN.PNG";
 export const footerContent = {
   logoSrc: logoNN,
 
-//   services: [
-//     { href: "/business-analytics", text: "Business Analytics" },
-//     { href: "/digital-marketing", text: "Digital Marketing" },
-//     { href: "/automation-integration", text: "Automation & Integration" },
-//   ],
+
 
   company: [
     { href: "/userlist", text: "User-List" },
