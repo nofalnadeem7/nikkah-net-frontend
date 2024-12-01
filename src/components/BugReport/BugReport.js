@@ -6,7 +6,7 @@ import "./BugReport.css";
 const BugReport = () => {
     const [bugs, setBugs] = useState([]);
     const [error, setError] = useState("");
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log(1);
@@ -49,6 +49,7 @@ const BugReport = () => {
                 return;
             }
             console.log("Bug data received:", result.data);
+            console.log("Type of first item:", typeof result.data[0]);
             setBugs(result.data);
             setError("");
         } catch (error) {
@@ -66,8 +67,13 @@ const BugReport = () => {
     };
 
     const handleBugReport = (bugId) => {
+        if (!bugId) {
+            console.error("Invalid Bug ID:", bugId);
+            return;
+        }
         navigate(`/viewbug/${bugId}`);
     };
+
 
 
     return (
@@ -78,24 +84,24 @@ const BugReport = () => {
                     <div className="bug-report-card" key={index}>
                         <div className="bug-report-details">
                             <p className="user-name">
-                                <strong>Title:</strong> {JSON.stringify(item.description)}
+                                <strong>Title:</strong> {item.description || "No description provided"}
                             </p>
                             <p>
-                                <strong>User-ID:</strong> {JSON.stringify(item.id)}
+                                <strong>User-ID:</strong> {item.id || "No ID available"}
                             </p>
                             <p>
-                                <strong>Status</strong> {JSON.stringify(item.status)}
+                                <strong>Status:</strong> {item.status || "Unknown"}
                             </p>
                             <p>
-                                <strong>Date:</strong> {new Date(item.date).toLocaleString()}
+                                <strong>Date:</strong> {item.date ? new Date(item.date).toLocaleString() : "No date provided"}
                             </p>
                         </div>
-
                         <button className="resolve-btn" onClick={() => handleBugReport(item.id)}>
-                            Resolve</button>
-
+                            Resolve
+                        </button>
                     </div>
                 ))}
+
             </div>
         </div>
 
