@@ -58,6 +58,68 @@ const ViewReport = () => {
     );
   }
 
+  const deleteUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      if (!token) {
+        setError("User is not authenticated. Please log in again.");
+        return;
+      }
+  
+      const response = await fetch("http://localhost:5000/admin/delete-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          
+        },
+        body: JSON.stringify({ id: report.reported.id }),
+      });
+  
+      let result;
+      try {
+        result = await response.json();
+      } catch (error) {
+        console.error("Invalid JSON response:", error);
+        setError("Server error: Invalid response format.");
+        return;
+      }
+  
+      console.log("Delete User Response:", result);
+  
+      if (!response.ok) {
+        setError(result?.message || "Failed to delete the user.");
+        return;
+      }
+
+      const resp=await fetch("http://localhost:5000/admin/update-user-rep",
+         {
+           method:"POST",
+           headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            
+          },
+          body: JSON.stringify({ id: report.id, status:"resolved" }),
+
+         }
+      );
+
+      if (!resp.ok) {
+        setError(result?.message || "Failed to change the status.");
+        return;
+      }
+  
+      setError("");
+      alert("User banned successfully.");
+      window.location.href = "/userreport"; 
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      setError("An error occurred. Please try again later.");
+    }
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -75,7 +137,8 @@ const ViewReport = () => {
           <p><strong>Status:</strong> {report.status}</p>
         </div>
         <div className="profile-actions">
-          <button className="btn ban-user">Ban User</button>
+          <button className="btn ban-user" onClick={deleteUser}
+            disabled={report?.discarded} > Ban User</button>
           <button className="btn discard">Discard</button>
         </div>
       </div>
