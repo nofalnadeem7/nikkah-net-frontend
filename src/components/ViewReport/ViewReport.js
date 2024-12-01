@@ -1,95 +1,53 @@
-import React from "react";
+import React,{ useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsPersonFillExclamation } from "react-icons/bs";
 import "./ViewReport.css"; 
 
 const ViewReport = () => {
-    const reports = [
-        {
-          id: 1,
-          reporter: {
-            _id: "64ca1b23e72f5a3f3a2d1e8c",
-            name: "Alice Johnson",
-            email: "alice@example.com"
-          },
-          reported: {
-            _id: "64ca1b23e72f5a3f3a2d1e8d",
-            name: "Bob Smith",
-            email: "bob@example.com"
-          },
-          reason: "Inappropriate language in a chat.",
-          date: "2024-11-23T14:32:00Z",
-          status: "pending"
-        },
-        {
-          id: 2,
-          reporter: {
-            _id: "64ca1b23e72f5a3f3a2d1e8e",
-            name: "Charlie Brown",
-            email: "charlie@example.com"
-          },
-          reported: {
-            _id: "64ca1b23e72f5a3f3a2d1e8f",
-            name: "Diana Prince",
-            email: "diana@example.com"
-          },
-          reason: "Spamming multiple users.",
-          date: "2024-11-22T09:15:00Z",
-          status: "resolved"
-        },
-        {
-          id: 3,
-          reporter: {
-            _id: "64ca1b23e72f5a3f3a2d1e90",
-            name: "Eve Black",
-            email: "eve@example.com"
-          },
-          reported: {
-            _id: "64ca1b23e72f5a3f3a2d1e91",
-            name: "Frank Green",
-            email: "frank@example.com"
-          },
-          reason: "Sharing offensive content.",
-          date: "2024-11-24T10:50:00Z",
-          status: "pending"
-        },
-        {
-          id: 4,
-          reporter: {
-            _id: "64ca1b23e72f5a3f3a2d1e92",
-            name: "Grace Hopper",
-            email: "grace@example.com"
-          },
-          reported: {
-            _id: "64ca1b23e72f5a3f3a2d1e93",
-            name: "Hank Adams",
-            email: "hank@example.com"
-          },
-          reason: "Impersonating another user.",
-          date: "2024-11-21T18:05:00Z",
-          status: "resolved"
-        },
-        {
-          id: 5,
-          reporter: {
-            _id: "64ca1b23e72f5a3f3a2d1e94",
-            name: "Ivy Walker",
-            email: "ivy@example.com"
-          },
-          reported: {
-            _id: "64ca1b23e72f5a3f3a2d1e95",
-            name: "Jack Hill",
-            email: "jack@example.com"
-          },
-          reason: "Harassment in direct messages.",
-          date: "2024-11-20T22:45:00Z",
-          status: "pending"
-        }
-      ];
-      
+  const { reportId } = useParams();
+  const [report, setReports] = useState(null);
+  const [error, setError] = useState("");
 
-  const { reportId } = useParams(); 
-  const report = reports.find((r) => r.id === parseInt(reportId)); 
+  useEffect(() => {
+    getUserReport(reportId);
+  }, [reportId]);
+
+  const getUserReport = async (reportId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("User is not authenticated. Please log in again.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/admin/user-report-info/" + reportId, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setError("Your session has expired. Please log in again.");
+          localStorage.removeItem("token");
+        } else {
+          setError(result?.message || "Failed to fetch user report details.");
+        }
+        return;
+      }
+
+      setReports(result.data);
+      setError("");
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      setError("An error occurred. Please try again later.");
+    }
+  };
+    
 
   
   if (!report) {

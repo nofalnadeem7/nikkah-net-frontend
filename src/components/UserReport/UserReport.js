@@ -6,6 +6,7 @@ import "./UserReport.css";
 const UserReport = () => {
   const [reports, setReports] = useState([]);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(1);
