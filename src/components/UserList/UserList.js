@@ -95,9 +95,6 @@ const UserList = () => {
                 <p>
                   <strong>Age:</strong> {calculateAge(item.dob)}
                 </p>
-                {/* <p> */}
-                {/* <strong>Religion:</strong> {capitalizeString(item.religion)}
-                </p> */}
               </div>
               <button className="view-profile-btn" onClick={() => handleViewProfile(item.id)}>
                 View Profile
