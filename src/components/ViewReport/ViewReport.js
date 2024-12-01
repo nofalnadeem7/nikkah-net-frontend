@@ -62,12 +62,30 @@ const ViewReport = () => {
   const deleteUser = async () => {
     try {
       const token = localStorage.getItem("token");
+      let result;
 
       if (!token) {
         setError("User is not authenticated. Please log in again.");
         return;
       }
-      const resp2=await fetch("http://localhost:5000/admin/resolve-user-report",
+      const resp=await fetch("http://localhost:5000/admin/update-user-rep",
+         {
+           method:"POST",
+           headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            
+          },
+          body: JSON.stringify({ id: report.id, status:"resolved" }),
+
+         }
+      );
+
+      if (!resp.ok) {
+        setError(result?.message || "Failed to change the status.");
+        return;
+      }
+      const resp2=await fetch("http://localhost:5000/admin/resolve-user-reports",
          {
            method:"POST",
            headers: {
@@ -95,7 +113,7 @@ const ViewReport = () => {
         body: JSON.stringify({ id: report.reported.id }),
       });
   
-      let result;
+      
       try {
         result = await response.json();
       } catch (error) {
@@ -111,23 +129,7 @@ const ViewReport = () => {
         return;
       }
 
-      const resp=await fetch("http://localhost:5000/admin/update-user-rep",
-         {
-           method:"POST",
-           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            
-          },
-          body: JSON.stringify({ id: report.id, status:"resolved" }),
-
-         }
-      );
-
-      if (!resp.ok) {
-        setError(result?.message || "Failed to change the status.");
-        return;
-      }
+      
 
       
   
