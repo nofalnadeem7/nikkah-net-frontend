@@ -62,9 +62,26 @@ const ViewReport = () => {
   const deleteUser = async () => {
     try {
       const token = localStorage.getItem("token");
-  
+
       if (!token) {
         setError("User is not authenticated. Please log in again.");
+        return;
+      }
+      const resp2=await fetch("http://localhost:5000/admin/resolve-user-report",
+         {
+           method:"POST",
+           headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            
+          },
+          body: JSON.stringify({ userid: report.reported._id}),
+
+         }
+      );
+
+      if (!resp2.ok) {
+        setError(result?.message || "Failed to change the status.");
         return;
       }
   
@@ -111,6 +128,8 @@ const ViewReport = () => {
         setError(result?.message || "Failed to change the status.");
         return;
       }
+
+      
   
       setError("");
       alert("User banned successfully.");
