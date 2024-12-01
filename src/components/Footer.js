@@ -30,17 +30,17 @@ const CustomFooter = () => {
             <Space>
               <Button
                 icon={<FacebookOutlined style={{ fontSize: "24px" }} />}
-                href="https://www.facebook.com/analyzinn"
+                href="https://www.facebook.com/nikkahnet"
                 className="footer-icon-button"
               />
               <Button
                 icon={<MailOutlined style={{ fontSize: "24px" }} />}
-                href="mailto:admin@analyzinn.com"
+                href="mailto:admin@nikkahnet.com"
                 className="footer-icon-button"
               />
               <Button
                 icon={<LinkedinOutlined style={{ fontSize: "24px" }} />}
-                href="https://www.linkedin.com/company/analyzinn"
+                href="https://www.linkedin.com/company/nikkahnet"
                 className="footer-icon-button"
               />
             </Space>
