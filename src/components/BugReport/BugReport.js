@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./BugReport.css";
 
 
 const BugReport = () => {
     const [bugs, setBugs] = useState([]);
     const [error, setError] = useState("");
+    const navigate=useNavigate();
 
     useEffect(() => {
         console.log(1);
@@ -14,19 +15,45 @@ const BugReport = () => {
 
     const getBugs = async () => {
         try {
-            let result = await fetch("/Bug.json");
-            result = await result.json();
+            const token = localStorage.getItem("token");
+            console.log("Token retrieved:", token);
 
-            const formattedBugs = result.map((bug) => ({
-                ...bug,
-                name: `${capitalizeString(bug.firstname)} ${bug.middlename ? capitalizeString(bug.middlename) : ""} ${capitalizeString(bug.lastname)} `,
-                // age: calculateAge(new Date(user.dob)),
-            }));
+            if (!token) {
+                setError("User is not authenticated. Please log in again.");
+                return;
+            }
 
-            setBugs(formattedBugs);
-            console.log(formattedBugs);
-        } catch (err) {
-            setError("Failed to fetch users.");
+            const response = await fetch("http://localhost:5000/admin/all-bug-reports", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            console.log("Response Status:", response.status);
+
+            const result = await response.json();
+            console.log("Response JSON:", result);
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    setError("Your session has expired. Please log in again.");
+                    localStorage.removeItem("token");
+                } else {
+                    setError(result?.message || "Failed to fetch bug report list.");
+                }
+                return;
+            }
+            if (!result?.data || !Array.isArray(result.data)) {
+                setError("No bug reports found or invalid data format.");
+                return;
+            }
+            console.log("Bug data received:", result.data);
+            setBugs(result.data);
+            setError("");
+        } catch (error) {
+            console.error("Error fetching user reports:", error);
+            setError("An error occurred. Please try again later.");
         }
     };
 
@@ -38,6 +65,10 @@ const BugReport = () => {
         return string;
     };
 
+    const handleBugReport = (bugId) => {
+        navigate(`/viewbug/${bugId}`);
+    };
+
 
     return (
         <div className="bug-report-container">
@@ -47,21 +78,22 @@ const BugReport = () => {
                     <div className="bug-report-card" key={index}>
                         <div className="bug-report-details">
                             <p className="user-name">
-                                <strong>Title:</strong> {item.description}
+                                <strong>Title:</strong> {JSON.stringify(item.description)}
                             </p>
                             <p>
-                                <strong>User-Id:</strong> {item.userid}
+                                <strong>User-ID:</strong> {JSON.stringify(item.id)}
                             </p>
                             <p>
-                                <strong>Status</strong> {item.status}
+                                <strong>Status</strong> {JSON.stringify(item.status)}
                             </p>
                             <p>
-                                <strong>Date:</strong> {item.date}
+                                <strong>Date:</strong> {new Date(item.date).toLocaleString()}
                             </p>
                         </div>
-                        <Link to={`/viewbug/${item.id}`}>
-                            <button className="resolve-btn">Resolve</button>
-                        </Link>
+
+                        <button className="resolve-btn" onClick={() => handleBugReport(item.id)}>
+                            Resolve</button>
+
                     </div>
                 ))}
             </div>
