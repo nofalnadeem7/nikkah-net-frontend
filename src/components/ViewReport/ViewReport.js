@@ -120,6 +120,7 @@ const ViewReport = () => {
       setError("An error occurred. Please try again later.");
     }
   };
+  
 
   const ignore = async()=>{
 
