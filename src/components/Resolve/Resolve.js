@@ -1,13 +1,13 @@
-import React,{useState,useEffect} from "react";
-import { useParams,useNavigate} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaBug } from "react-icons/fa6";
-import "./Resolve.css"; 
+import "./Resolve.css";
 
 const Resolve = () => {
   const { bugId } = useParams();
   const [bug, setBugs] = useState(null);
   const [error, setError] = useState("");
-  const  navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getBugReport(bugId);
@@ -49,7 +49,7 @@ const Resolve = () => {
     }
   };
 
-  
+
   if (!bug) {
     return (
       <div className="bug-container">
@@ -57,6 +57,49 @@ const Resolve = () => {
       </div>
     );
   }
+  const ResolvedReport = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("User is not authenticated. Please log in again.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/admin/update-bug-rep", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+
+        },
+        body: JSON.stringify({ id: bugId }),
+      });
+
+      let result;
+      try {
+        result = await response.json();
+      } catch (error) {
+        console.error("Invalid JSON response:", error);
+        setError("Server error: Invalid response format.");
+        return;
+      }
+
+      console.log("Resolved Bug:", result);
+
+      if (!response.ok) {
+        setError(result?.message || "Failed to resolve the bug.");
+        return;
+      }
+
+      setError("");
+      alert("Bug resolved successfully.");
+      window.location.href = "/bugreport";
+    } catch (error) {
+      console.error("Error resolving bug:", error);
+      setError("An error occurred. Please try again later.");
+    }
+  };
 
   return (
     <div className="bug-container">
@@ -75,13 +118,16 @@ const Resolve = () => {
           <p><strong>Status:</strong> {report.status}</p> */}
         </div>
         <div className="profile-actions">
-          <button className="btn resolved">Resolved</button>
+          <button className="btn resolved" onClick={ResolvedReport}
+            disabled={bug?.resolved}
+          >
+          {bug?.resolved ? "Resolved" : "Resolve"}</button>
           <button className="btn pending">Pending</button>
         </div>
       </div>
     </div>
   );
-  
+
 };
 
 export default Resolve;
