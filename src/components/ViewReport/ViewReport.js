@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { BsPersonFillExclamation } from "react-icons/bs";
 import "./ViewReport.css"; 
 
@@ -7,6 +7,7 @@ const ViewReport = () => {
   const { reportId } = useParams();
   const [report, setReports] = useState(null);
   const [error, setError] = useState("");
+  const  navigate=useNavigate();
 
   useEffect(() => {
     getUserReport(reportId);
@@ -120,6 +121,29 @@ const ViewReport = () => {
     }
   };
 
+  const ignore = async()=>{
+
+    const token = localStorage.getItem("token");
+    const resp=await fetch("http://localhost:5000/admin/update-user-rep",
+         {
+           method:"POST",
+           headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            
+          },
+          body: JSON.stringify({ id: report.id, status:"resolved" }),
+
+         }
+      );
+      let result= await resp.json();
+      if (!resp.ok) {
+        setError(result?.message || "Failed to change the status.");
+        return;
+      }
+    navigate('/userreport')
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -139,7 +163,7 @@ const ViewReport = () => {
         <div className="profile-actions">
           <button className="btn ban-user" onClick={deleteUser}
             disabled={report?.discarded} > Ban User</button>
-          <button className="btn discard">Discard</button>
+          <button className="btn discard" onClick={ignore}>Discard</button>
         </div>
       </div>
     </div>
